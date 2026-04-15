@@ -153,8 +153,8 @@ CONFIG_PACKAGE_bind-nslookup=y
 # 修复拨号与网络性能
 CONFIG_PACKAGE_ppp-mod-pppoe=y
 CONFIG_PACKAGE_kmod-tcp-bbr=y
-#修复其他问题
+# 修复 Tailscale 与防火墙工具链
 CONFIG_PACKAGE_ip6tables=y
 CONFIG_PACKAGE_iptables-mod-conntrack-extra=y
-CONFIG_PACKAGE_ca-bundle=y  # 确保 HTTPS 证书正常，否则 Tailscale 连不上服务器
-CONFIG_PACKAGE_kmod-tun=y    # Tailscale 必须的虚拟网卡驱动（你已勾选）
+CONFIG_PACKAGE_ca-bundle=y
+CONFIG_PACKAGE_kmod-tun=y
