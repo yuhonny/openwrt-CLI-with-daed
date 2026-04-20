@@ -2,6 +2,10 @@
 . $(dirname "$(realpath "$0")")/function.sh
 #移除luci-app-attendedsysupgrade
 sed -i "/attendedsysupgrade/d" $(find ./feeds/luci/collections/ -type f -name "Makefile")
+# System Plugins 移除Plugins
+sed -i '/admin\/system\/plugins/,/},/d' feeds/luci/modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json
+# OLSR Plugins 移除Plugins
+grep -rl 'olsrd/plugins' feeds/luci | xargs sed -i '/plugins/d'
 #修改默认主题
 sed -i "s/luci-theme-bootstrap/luci-theme-$WRT_THEME/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
 #修改immortalwrt.lan关联IP
