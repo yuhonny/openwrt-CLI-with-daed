@@ -1,9 +1,20 @@
 #科学插件调整
-#CONFIG_PACKAGE_luci-app-homeproxy=y
+CONFIG_PACKAGE_luci-app-homeproxy=y
 CONFIG_PACKAGE_luci-app-daed=y
 CONFIG_PACKAGE_luci-app-dae=y
 CONFIG_PACKAGE_luci-app-nikki=n
+# 确保 sing-box 及其 eBPF 功能被编译
+CONFIG_PACKAGE_sing-box=y
+CONFIG_SINGBOX_WITH_EBPF=y
+CONFIG_SINGBOX_WITH_UTLS=y
+CONFIG_SINGBOX_WITH_QUIC=y
+CONFIG_SINGBOX_WITH_V2RAY_API=y
 
+# 强制开启 BPF 内核模块支持
+CONFIG_PACKAGE_kmod-bpf=y
+CONFIG_PACKAGE_kmod-ubpf=y
+CONFIG_PACKAGE_kmod-tcp-bpf=y
+CONFIG_PACKAGE_libbpf=y
 #增加插件
 CONFIG_PACKAGE_luci-app-autoreboot=y
 CONFIG_PACKAGE_luci-app-gecoosac=n
