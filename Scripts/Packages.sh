@@ -120,7 +120,7 @@ rm -rf ../feeds/luci/applications/luci-app-{passwall*,mosdns,dockerman,dae*,bypa
 rm -rf ../feeds/packages/net/{v2ray-geodata,dae*}
 
 # 2. 拷贝本地仓库的自定义 package 覆盖进来
-cp -r $GITHUB_WORKSPACE/package/* ./
+cp -r $GITHUB_WORKSPACE/package/* ./ 2>/dev/null || true
 
 # 3. 修复 daed Makefile（如果 patches 路径下有自定义文件）
 if [ -f "$GITHUB_WORKSPACE/patches/daed/Makefile" ]; then
