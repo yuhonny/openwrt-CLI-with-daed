@@ -124,16 +124,36 @@ UPDATE_VERSION() {
 #UPDATE_VERSION "sing-box"
 #UPDATE_VERSION "tailscale"
 
-
-
-#删除官方的默认插件
+# 删除官方的默认插件
 rm -rf ../feeds/luci/applications/luci-app-{passwall*,mosdns,dockerman,dae*,bypass*}
 rm -rf ../feeds/packages/net/{v2ray-geodata,dae*}
 cp -r $GITHUB_WORKSPACE/package/* ./
-#修复daed/Makefile
+
+# 修复 daed/Makefile
 rm -rf luci-app-daed/daed/Makefile && cp -r $GITHUB_WORKSPACE/patches/daed/Makefile luci-app-daed/daed/
 cat luci-app-daed/daed/Makefile
-#修复libubox报错
-#sed -i '/include $(INCLUDE_DIR)\/cmake.mk/a PKG_BUILD_FLAGS:=no-werror' ../package/libs/libubox/Makefile
-#sed -i 's|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include|& -Wno-error=format-nonliteral -Wno-format-nonliteral|' ../package/libs/libubox/Makefile
-#cat ../package/libs/libubox/Makefile
+
+# ==================== 修复 daed 缺失 web 前端资源问题 ====================
+if [ -d "luci-app-daed/daed" ]; then
+    echo -e "\n[daed] 正在补全 web 前端静态资源..."
+    
+    # 判断 wing 架构子目录是否存在，优先使用 wing/web，否则使用 daed/web
+    TARGET_WEB_DIR="luci-app-daed/daed/wing/web"
+    if [ ! -d "luci-app-daed/daed/wing" ]; then
+        TARGET_WEB_DIR="luci-app-daed/daed/web"
+    fi
+
+    mkdir -p "$TARGET_WEB_DIR"
+
+    # 如果 web 文件夹为空，拉取官方已编译好的静态 UI 文件
+    if [ -z "$(ls -A "$TARGET_WEB_DIR" 2>/dev/null)" ]; then
+        curl -sL https://github.com/daeuniverse/daed-web/archive/refs/heads/gh-pages.tar.gz | tar -xz -C "$TARGET_WEB_DIR" --strip-components=1 || true
+        echo "[daed] 前端资源下载并解压完成！"
+    fi
+fi
+# =========================================================================
+
+# 修复 libubox 报错（如需要可取消注释）
+# sed -i '/include $(INCLUDE_DIR)\/cmake.mk/a PKG_BUILD_FLAGS:=no-werror' ../package/libs/libubox/Makefile
+# sed -i 's|TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include|& -Wno-error=format-nonliteral -Wno-format-nonliteral|' ../package/libs/libubox/Makefile
+# cat ../package/libs/libubox/Makefile
