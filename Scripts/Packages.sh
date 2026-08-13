@@ -119,7 +119,7 @@ UPDATE_VERSION() {
 rm -rf ../feeds/luci/applications/luci-app-{passwall*,mosdns,dockerman,dae*,bypass*}
 rm -rf ../feeds/packages/net/{v2ray-geodata,dae*}
 
-# 2. 拷贝本地仓库的自定义 package 覆盖进来
+# 2. 拷贝本地仓库的自定义 package 覆盖进来（增加防止为空报错的静默处理）
 cp -r $GITHUB_WORKSPACE/package/* ./ 2>/dev/null || true
 
 # 3. 修复 daed Makefile（如果 patches 路径下有自定义文件）
@@ -154,7 +154,7 @@ if [ -n "$DAED_DIR" ]; then
         if [ -f "$TARGET_WEB_DIR/index.html" ]; then
             echo "[daed] 前端静态资源下载成功！"
         else
-            echo "[daed] 警告：前端资源下载失败，请检查连接！"
+            echo "[daed] 警告：前端资源下载失败，请检查网络连接！"
         fi
     else
         echo "[daed] 检测到 web 目录已有 index.html，跳过下载。"
